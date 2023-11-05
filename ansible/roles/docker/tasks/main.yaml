@@ -1,0 +1,16 @@
+---
+- name: To download Docker
+  apt: 
+    name: {{ item }}
+    state: present
+  with_items: 
+    - docker.io
+    - nginx
+- name: to run the docker 
+  systemd:
+    state: started
+    name: {{ items }}
+  with_items:
+    - docker
+    - nginx
+    

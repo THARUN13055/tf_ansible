@@ -10,6 +10,19 @@ variable "nic" {
   type = map(string)
 }
 
-variable "subnet_id" {
+variable "subnets_ids" {
+  type = any
+}
+
+variable "vmsize" {
   type = string
+}
+
+variable "image_sku" {
+  type = string
+}
+
+variable "file_path" {
+  type      = string
+  sensitive = true
 }

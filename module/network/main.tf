@@ -31,6 +31,10 @@ resource "azurerm_subnet_network_security_group_association" "security_group_ass
   for_each                  = var.nsg_name
   subnet_id                 = azurerm_subnet.virtual_subnet[each.value].id
   network_security_group_id = azurerm_network_security_group.security_group[each.key].id
+  depends_on = [
+    azurerm_virtual_network.virtual_network,
+    azurerm_subnet.virtual_subnet,
+  ]
 }
 
 resource "azurerm_network_security_group" "security_group" {
@@ -54,4 +58,7 @@ resource "azurerm_network_security_rule" "security_rules" {
   destination_address_prefix  = "*"
   resource_group_name         = var.resource_name
   network_security_group_name = azurerm_network_security_group.security_group[each.value.network_security_group_name].id
+  depends_on = [
+    module.resource
+  ]
 }

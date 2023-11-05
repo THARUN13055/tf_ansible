@@ -40,6 +40,14 @@ module "network" {
       network_security_group_name = "nsg-subnet2"
     }
   ]
+  depends_on = [
+    module.resource_group
+  ]
+
+}
+# module/network
+output "subnet_ids" {
+  value = module.network.subnets_ids
 }
 
 
@@ -49,9 +57,15 @@ module "machine" {
   location      = local.location
 
   nic = {
-    "nic1" = "subnet1"
-    "nic2" = "subnet2"
+    "nic1" = "slave1"
+    "nic2" = "slave2"
   }
+  vmsize      = "Standard_B1s"
+  image_sku   = "22.04-LTS"
+  subnets_ids = module.network.subnets_ids[*]
+  file_path   = local.file_path
+  depends_on = [
+    module.network
+  ]
 
-  subnet_id = module.network.subnets_id
 }
